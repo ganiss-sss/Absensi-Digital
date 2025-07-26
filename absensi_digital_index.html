@@ -1,0 +1,62 @@
+# Absensi-Digital
+Aplikasi Absensi Digital berbasis web 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Absensi Digital Sederhana</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #888; padding: 8px; text-align: left; }
+    th { background: #e0e0e0; }
+    input[type="text"] { padding: 6px; width: 200px; }
+    button { padding: 6px 16px; }
+  </style>
+</head>
+<body>
+  <h2>Absensi Digital</h2>
+  <form id="absenForm">
+    <label>Nama: <input type="text" id="nama" required></label>
+    <button type="submit">Absen</button>
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Waktu Absen</th>
+      </tr>
+    </thead>
+    <tbody id="absenTable">
+    </tbody>
+  </table>
+  <script>
+    let absenData = [];
+    const form = document.getElementById('absenForm');
+    const table = document.getElementById('absenTable');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value.trim();
+      if (!nama) return;
+      const waktu = new Date().toLocaleString('id-ID');
+      absenData.push({ nama, waktu });
+      updateTable();
+      form.reset();
+    });
+
+    function updateTable() {
+      table.innerHTML = '';
+      absenData.forEach((data, i) => {
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td>${data.nama}</td>
+          <td>${data.waktu}</td>
+        </tr>`;
+        table.innerHTML += row;
+      });
+    }
+  </script>
+</body>
+</html>

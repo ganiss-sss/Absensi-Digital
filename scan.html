@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Scan Absensi Digital</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    #reader { width: 350px; margin: auto; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #888; padding: 8px; text-align: left; }
+    th { background: #e0e0e0; }
+  </style>
+</head>
+<body>
+  <h2>Scan QR untuk Absensi</h2>
+  <div id="reader"></div>
+  <div id="result"></div>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama (Dari QR)</th>
+        <th>Waktu Scan</th>
+      </tr>
+    </thead>
+    <tbody id="absenTable"></tbody>
+  </table>
+  <script>
+    let absenData = [];
+    function updateTable() {
+      const table = document.getElementById('absenTable');
+      table.innerHTML = '';
+      absenData.forEach((data, i) => {
+        table.innerHTML += `<tr>
+          <td>${i + 1}</td>
+          <td>${data.nama}</td>
+          <td>${data.waktu}</td>
+        </tr>`;
+      });
+    }
+    function onScanSuccess(decodedText, decodedResult) {
+      document.getElementById('result').innerText = "Scan berhasil: " + decodedText;
+      const waktu = new Date().toLocaleString('id-ID');
+      absenData.push({ nama: decodedText, waktu });
+      updateTable();
+    }
+    function onScanError(errorMessage) {
+      // Error callback, bisa diabaikan atau ditampilkan
+    }
+    html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+  </script>
+</body>
+</html>
